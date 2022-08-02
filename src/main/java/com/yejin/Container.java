@@ -5,12 +5,8 @@ import com.yejin.annotation.Controller;
 import com.yejin.annotation.Service;
 import com.yejin.util.Ut;
 import org.reflections.Reflections;
-import org.reflections.scanners.FieldAnnotationsScanner;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Container {
 
@@ -18,11 +14,11 @@ public class Container {
    // private static final HomeController homeController;
     private static List<String> allControllerNames;
     private static Map<Class,Object> classObjectMap;
-    private static Map<Class,Object> fields;
+    //private static Map<Class,Object> fields;
 
     static {
         classObjectMap=new HashMap<>();
-        fields=new HashMap<>();
+       // fields=new HashMap<>();
         scanComponents();
         System.out.println("classObjMap : "+classObjectMap.keySet());
         allControllerNames=new ArrayList<>();
@@ -47,6 +43,7 @@ public class Container {
         Reflections reflections = new Reflections("com.yejin");
         scanServices(reflections);
         scanControllers(reflections);
+        resolveDependenciesAllComponents();
     }
 
     private static void scanServices(Reflections reflections) {
@@ -58,11 +55,103 @@ public class Container {
     private static void scanControllers(Reflections reflections) {
         for(Class<?> cls : reflections.getTypesAnnotatedWith(Controller.class)){
             classObjectMap.put(cls, Ut.cls.newObj(cls,null));
-            scanAutowired(new Reflections("com.yejin",new FieldAnnotationsScanner()));
+            //scanAutowired(new Reflections("com.yejin",new FieldAnnotationsScanner()));
         }
 
     }
+    private static void resolveDependenciesAllComponents() {
+    //   System.out.println("resolveDepencies : ");
+        for (Class cls : classObjectMap.keySet()) {
+            Object o = classObjectMap.get(cls);
+        //    System.out.println(o);
+            resolveDependencies(o);
+        }
+    }
 
+    private static void resolveDependencies(Object o) {
+        //System.out.println(o.getClass().getDeclaredField("articleService"));
+     //   System.out.println(o.getClass().getDeclaredFields().length);
+      //  System.out.println(Arrays.stream(o.getClass().getDeclaredFields()).toList());
+     //   System.out.println(Arrays.stream(Arrays.stream(o.getClass().getDeclaredFields()).toList().get(0).getDeclaredAnnotations()).toList());
+
+        //   System.out.println(Arrays.stream(o.getClass().getDeclaredField("articleService").getDeclaredAnnotations()).toList());
+        //System.out.println(o.getClass().getDeclaredField("articleService").getAnnotation(Autowired.class));
+        // System.out.println(o.getClass().getDeclaredField("articleService").getAnnotations().length);
+        Arrays.asList(o.getClass().getDeclaredFields())
+                .stream()
+                .filter(f -> f.isAnnotationPresent(Autowired.class))
+                .map(field -> {
+                    field.setAccessible(true);
+                    return field;
+                })
+                .forEach(field -> {
+                    Class cls = field.getType();
+                    Object dependency = classObjectMap.get(cls);
+
+                    try {
+                        field.set(o, dependency);
+                    } catch (IllegalAccessException e) {
+
+                    }
+                });
+    }
+
+/*    private static void resolveDependencies(Object obj){
+        Arrays.asList(obj.getClass().getDeclaredFields())
+                .stream()
+                .filter(f-> f.isAnnotationPresent(Autowired.class))
+                .map(field -> {field.setAccessible(true);
+                return field;})
+                .forEach(field->{
+                    Class cls = field.getType();
+                    Object dependency = classObjectMap.get(cls);
+                    try {
+                        field.set(obj,dependency);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+    }*/
+/*    private static void initObject(Object obj) {
+        Arrays.asList(obj.getClass().getDeclaredFields())
+                .stream()
+                .sequential()
+                .filter(f -> f.isAnnotationPresent(Autowired.class))
+                .map(field -> {
+                    field.setAccessible(true);
+                    return field;
+                })
+                .forEach(field -> {
+                    Class clazz = field.getType();
+
+                    try {
+                        field.set(obj, classObjectMap.get(clazz));
+                    } catch (IllegalAccessException e) {
+
+                    }
+                });
+    }*/
+/*
+    public static Object getFieldValue(Object o, String fieldName, Object defaultValue) {
+        Field field = null;
+
+        try {
+            field = o.getClass().getDeclaredField(fieldName);
+        } catch (NoSuchFieldException e) {
+            return defaultValue;
+        }
+
+        field.setAccessible(true);
+
+        try {
+            return field.get(o);
+        } catch (IllegalAccessException e) {
+            return defaultValue;
+        }
+    }
+*/
+
+/*
     public static void scanAutowired(Reflections ref){
       //  System.out.println("obj 가 없나?");
         for(Object obj : ref.getFieldsAnnotatedWith(Autowired.class)){
@@ -71,14 +160,15 @@ public class Container {
         }
         System.out.println(ref.getFieldsAnnotatedWith(Autowired.class));
     }
+*/
 
     public static <T> T getObj(Class<T> cls){
         return (T)classObjectMap.get(cls);
     }
 
-    public static <T> T getFileds(Class<T> cls){
+/*    public static <T> T getFileds(Class<T> cls){
         return (T)fields.get(cls);
-    }
+    }*/
 
 /*
     public static ArticleController getArticleController() {

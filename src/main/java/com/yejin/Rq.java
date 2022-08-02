@@ -229,4 +229,14 @@ public class Rq {
     public void failJson(String resultCode, String msg,Object resultData) {
         json(new ResultData<>(resultCode,msg,resultData));
     }
+
+    public String getRouteMethod() {
+        String method = getParam("_method", "");
+
+        if (method.length() > 0) {
+            return method.toUpperCase();
+        }
+
+        return req.getMethod();
+    }
 }

@@ -1,27 +1,24 @@
 package com.yejin.article.controller;
 
-import com.yejin.Container;
 import com.yejin.annotation.Autowired;
 import com.yejin.annotation.Controller;
 import com.yejin.annotation.GetMapping;
 import com.yejin.article.service.ArticleService;
-import org.reflections.Reflections;
 
 @Controller // 컨트롤러 다
 public class ArticleController {
+
     @Autowired
     private ArticleService articleService;
 
     public ArticleService getArticleServiceForTest(){
-        this.articleService=Container.getFileds(ArticleService.class);
-        System.out.println(this.articleService);
         return articleService;
     }
 
-    private void initArticleService(ArticleService articleService){
+/*    private void initArticleService(ArticleService articleService){
         this.articleService=Container.getFileds(ArticleService.class);
         System.out.println(this.articleService);
-    }
+    }*/
 /*
     private static ArticleController instance;
 

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.yejin.article.dto.ArticleDto;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -44,8 +45,42 @@ public class Ut {
 
             return new String(c);
         }
+
+        public static String beforeFrom(String str, String fromStr, int matchCount) {
+            StringBuilder sb = new StringBuilder();
+
+            String[] bits = str.split(fromStr);
+
+            for (int i = 0; i < matchCount; i++) {
+                sb.append(bits[i]);
+                if ( i + 1 < matchCount ) {
+                    sb.append(fromStr);
+                }
+            }
+
+            return sb.toString();
+        }
     }
 
+    public static class reflection {
+        public static <T> T getFieldValue(Object o, String fieldName, T defaultValue) {
+            Field field = null;
+
+            try {
+                field = o.getClass().getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                return defaultValue;
+            }
+
+            field.setAccessible(true);
+
+            try {
+                return (T)field.get(o);
+            } catch (IllegalAccessException e) {
+                return defaultValue;
+            }
+        }
+    }
 
     public static class json{
 
