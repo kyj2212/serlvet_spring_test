@@ -2,10 +2,12 @@ package com.yejin;
 
 import com.yejin.annotation.Autowired;
 import com.yejin.annotation.Controller;
+import com.yejin.annotation.Repository;
 import com.yejin.annotation.Service;
 import com.yejin.util.Ut;
 import org.reflections.Reflections;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 public class Container {
@@ -39,13 +41,23 @@ public class Container {
 
     }
 
+    public static <T> T getObj(Class<T> cls){
+        return (T)classObjectMap.get(cls);
+    }
+
     private static void scanComponents() {
         Reflections reflections = new Reflections("com.yejin");
         scanServices(reflections);
         scanControllers(reflections);
+        scanRepositories(reflections);
         resolveDependenciesAllComponents();
     }
 
+    private static void scanRepositories(Reflections reflections) {
+        for(Class<?> cls : reflections.getTypesAnnotatedWith(Repository.class)){
+            classObjectMap.put(cls, Ut.cls.newObj(cls,null));
+        }
+    }
     private static void scanServices(Reflections reflections) {
         for(Class<?> cls : reflections.getTypesAnnotatedWith(Service.class)){
             classObjectMap.put(cls, Ut.cls.newObj(cls,null));
@@ -54,21 +66,54 @@ public class Container {
 
     private static void scanControllers(Reflections reflections) {
         for(Class<?> cls : reflections.getTypesAnnotatedWith(Controller.class)){
-            classObjectMap.put(cls, Ut.cls.newObj(cls,null));
+            Object value=Ut.cls.newObj(cls,null);
+            classObjectMap.put(cls,value );
+           // scanAutowired(value);
             //scanAutowired(new Reflections("com.yejin",new FieldAnnotationsScanner()));
         }
 
     }
+
+    public static void scanAutowired(Object obj){
+        Class cls=obj.getClass();
+        System.out.println(Arrays.stream(cls.getDeclaredFields()).toList()); // 왜 declared? -> private 한 필드에 접근하기 위해서는 declared로 한다
+        //System.out.println(ref.getFieldsAnnotatedWith(Autowired.class).stream().toList()); // 아 이 필드의 어노테이션이 구나 오케이
+        System.out.println("isannotaion autowired? "+Arrays.stream(cls.getDeclaredFields()).filter(f->f.isAnnotationPresent(Autowired.class)).toList());
+        //  System.out.println("obj 가 없나?");
+        for(Field field : cls.getDeclaredFields()){
+     //   for(Field field : ref.getFieldsAnnotatedWith(Autowired.class)){
+            System.out.println(field);
+            if(!field.isAnnotationPresent(Autowired.class))
+                continue;
+            field.setAccessible(true);
+            Class o = field.getType(); // 왜 type? type으로 하면 Class 가 나오는데?
+            try {
+                System.out.println("cls "+cls); // class com.yejin.article.controller.ArticleController
+                System.out.println("o "+o); // class com.yejin.article.service.ArticleService
+                System.out.println("field "+field); // private com.yejin.article.service.ArticleService com.yejin.article.controller.ArticleController.articleService
+                System.out.println("get(cls) "+classObjectMap.get(cls)); // article controller 의 생성된 인스턴스 //com.yejin.article.controller.ArticleController@436813f3
+                System.out.println("get(o) "+ classObjectMap.get(o)); // article service 의 생성된 인스턴스 // com.yejin.article.service.ArticleService@8f4ea7c
+
+                Object value = classObjectMap.get(o);
+                field.set(obj,value);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+
+
     private static void resolveDependenciesAllComponents() {
     //   System.out.println("resolveDepencies : ");
         for (Class cls : classObjectMap.keySet()) {
-            Object o = classObjectMap.get(cls);
+            Object o = classObjectMap.get(cls); // "ArticleControllr" 클래스 객체 o 가 있다면
         //    System.out.println(o);
             resolveDependencies(o);
         }
     }
 
-    private static void resolveDependencies(Object o) {
+    private static void resolveDependencies(Object o) { // 객체 o 는
         //System.out.println(o.getClass().getDeclaredField("articleService"));
      //   System.out.println(o.getClass().getDeclaredFields().length);
       //  System.out.println(Arrays.stream(o.getClass().getDeclaredFields()).toList());
@@ -151,20 +196,8 @@ public class Container {
     }
 */
 
-/*
-    public static void scanAutowired(Reflections ref){
-      //  System.out.println("obj 가 없나?");
-        for(Object obj : ref.getFieldsAnnotatedWith(Autowired.class)){
-            System.out.println(obj);
-            fields.put(obj.getClass(),getObj(obj.getClass()));
-        }
-        System.out.println(ref.getFieldsAnnotatedWith(Autowired.class));
-    }
-*/
 
-    public static <T> T getObj(Class<T> cls){
-        return (T)classObjectMap.get(cls);
-    }
+
 
 /*    public static <T> T getFileds(Class<T> cls){
         return (T)fields.get(cls);

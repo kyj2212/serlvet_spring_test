@@ -11,9 +11,9 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-    public ArticleService getArticleServiceForTest(){
+/*    public ArticleService getArticleServiceForTest(){
         return articleService;
-    }
+    }*/
 
 /*    private void initArticleService(ArticleService articleService){
         this.articleService=Container.getFileds(ArticleService.class);

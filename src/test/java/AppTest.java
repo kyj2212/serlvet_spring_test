@@ -2,8 +2,11 @@
 
 import com.yejin.Container;
 import com.yejin.article.controller.ArticleController;
+import com.yejin.article.repository.ArticleRepository;
 import com.yejin.article.service.ArticleService;
 import com.yejin.home.controller.HomeController;
+import com.yejin.home.service.HomeService;
+import com.yejin.util.Ut;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -69,10 +72,20 @@ public class AppTest {
     @Test
     public void ioc_createController__should_create_service_too(){
         ArticleController articleController = Container.getObj(ArticleController.class);
+        HomeController homeController = Container.getObj(HomeController.class);
 
-        ArticleService articleService = articleController.getArticleServiceForTest();
+        ArticleService articleService = Ut.reflection.getFieldValue(articleController, "articleService", null);
+        HomeService homeService = Ut.reflection.getFieldValue(homeController,"homeService",null);
         System.out.println(articleService);
         assertThat(articleService).isNotNull();
+        assertThat(homeService).isNull();
     }
 
+    @Test
+    public void ioc_createService__should_create_repo_too(){
+        ArticleService articleService = Container.getObj(ArticleService.class);
+        ArticleRepository articleRepository = Ut.reflection.getFieldValue(articleService, "articleRepository", null);
+        System.out.println(articleRepository);
+        assertThat(articleRepository).isNotNull();
+    }
 }
