@@ -5,6 +5,7 @@ import com.yejin.article.controller.ArticleController;
 import com.yejin.home.controller.HomeController;
 import org.reflections.Reflections;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,13 +16,41 @@ public class Container {
     private static List<String> allController;
 
     static {
-        articleController=ArticleController.getInstance();
-        homeController=HomeController.getInstance();
+
+        Class article = ArticleController.class;
+        Class home = HomeController.class;
+        try {
+            articleController=(ArticleController) article.getDeclaredConstructor().newInstance();
+            homeController=(HomeController) home.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+/*        Reflections reflections = new Reflections("com.yejin");
+        for(Class<?> cls : reflections.getTypesAnnotatedWith(Controller.class)){
+            try {
+                articleController=(ArticleController) cls.getConstructor(String.class).newInstance("getArticleController");
+            } catch (InstantiationException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+        }*/
        // homeController=new HomeController();
         allController=new ArrayList<>();
 
     }
-    public static ArticleController getArticleController(){
+    public static ArticleController getArticleController() {
+
         return articleController;
     }
     public static HomeController getHomeController(){
@@ -30,8 +59,8 @@ public class Container {
 
     public static void getAllControllers() {
         Reflections reflections = new Reflections("com.yejin");
-        for(Class<?> classes : reflections.getTypesAnnotatedWith(Controller.class)){
-            String name = classes.getSimpleName().split("Controller")[0].toLowerCase();
+        for(Class<?> cls : reflections.getTypesAnnotatedWith(Controller.class)){
+            String name = cls.getSimpleName().split("Controller")[0].toLowerCase();
             allController.add(name);
         }
     }
