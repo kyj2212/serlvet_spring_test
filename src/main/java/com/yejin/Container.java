@@ -35,7 +35,11 @@ public class Container {
 
 
     public static List<String> getAllControllerNames() {
-        getAllControllers();
+        Reflections reflections = new Reflections("com.yejin");
+        for(Class<?> classes : reflections.getTypesAnnotatedWith(Controller.class)){
+            String name = classes.getSimpleName().split("Controller")[0].toLowerCase();
+            allController.add(name);
+        }
         return allController;
     }
 }
