@@ -66,5 +66,13 @@ public class AppTest {
         assertThat(articleService2).isEqualTo(articleService1);
     }
 
+    @Test
+    public void ioc_createController__should_create_service_too(){
+        ArticleController articleController = Container.getObj(ArticleController.class);
+
+        ArticleService articleService = articleController.getArticleServiceForTest();
+        System.out.println(articleService);
+        assertThat(articleService).isNotNull();
+    }
 
 }

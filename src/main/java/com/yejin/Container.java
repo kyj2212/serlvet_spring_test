@@ -1,9 +1,11 @@
 package com.yejin;
 
+import com.yejin.annotation.Autowired;
 import com.yejin.annotation.Controller;
 import com.yejin.annotation.Service;
 import com.yejin.util.Ut;
 import org.reflections.Reflections;
+import org.reflections.scanners.FieldAnnotationsScanner;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,9 +18,11 @@ public class Container {
    // private static final HomeController homeController;
     private static List<String> allControllerNames;
     private static Map<Class,Object> classObjectMap;
+    private static Map<Class,Object> fields;
 
     static {
         classObjectMap=new HashMap<>();
+        fields=new HashMap<>();
         scanComponents();
         System.out.println("classObjMap : "+classObjectMap.keySet());
         allControllerNames=new ArrayList<>();
@@ -54,11 +58,26 @@ public class Container {
     private static void scanControllers(Reflections reflections) {
         for(Class<?> cls : reflections.getTypesAnnotatedWith(Controller.class)){
             classObjectMap.put(cls, Ut.cls.newObj(cls,null));
+            scanAutowired(new Reflections("com.yejin",new FieldAnnotationsScanner()));
         }
+
+    }
+
+    public static void scanAutowired(Reflections ref){
+      //  System.out.println("obj 가 없나?");
+        for(Object obj : ref.getFieldsAnnotatedWith(Autowired.class)){
+            System.out.println(obj);
+            fields.put(obj.getClass(),getObj(obj.getClass()));
+        }
+        System.out.println(ref.getFieldsAnnotatedWith(Autowired.class));
     }
 
     public static <T> T getObj(Class<T> cls){
         return (T)classObjectMap.get(cls);
+    }
+
+    public static <T> T getFileds(Class<T> cls){
+        return (T)fields.get(cls);
     }
 
 /*
