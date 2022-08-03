@@ -58,12 +58,12 @@ public class MyMapTest {
 
 
     private void truncateArticleTable() {
-        myMap.run("TRUNCATE article");
+        myMap.run("TRUNCATE article"); //TRUNCATE TABLE 은 drop은 완전히 지우는거고, truncate는 그냥 내용만 날리기!!
     }
 
     @BeforeAll
     public void beforeAll() {
-        myMap = new MyMap("localhost", "yejin", "yejin1234", "my_map");
+        myMap = new MyMap("localhost", "yejin", "yejin1234", "my_map_test");
         myMap.setDevMode(true);
 
         createArticleTable();
@@ -258,20 +258,14 @@ public class MyMapTest {
     }
 
 
-/*
     @Test
-    public void getDESCtable() {
+    public void selectTest01() {
 
         SecSql sql = myMap.genSecSql();
         sql
-                .append("SELECT id")
-                .append("FROM article")
-                .appendIn("WHERE id IN (?)", ids)
-                .appendIn("ORDER BY FIELD (id, ?)", ids);
+                .appendIn("SELECT ?",Arrays.asList("title","body"))
+                .append("FROM article");
+        System.out.println(sql.selectStrings());
 
-        List<Long> foundIds = sql.selectLongs();
-
-        assertThat(foundIds).isEqualTo(ids);
     }
-    */
 }
