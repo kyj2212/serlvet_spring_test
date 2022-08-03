@@ -24,7 +24,7 @@ public class Container {
         scanComponents();
         System.out.println("classObjMap : "+classObjectMap.keySet());
         allControllerNames=new ArrayList<>();
-        /*        Class article = ArticleController.class;
+/*                Class article = ArticleController.class;
         Class home = HomeController.class;
         try {
             articleController=(ArticleController) article.getDeclaredConstructor().newInstance();
@@ -47,9 +47,9 @@ public class Container {
 
     private static void scanComponents() {
         Reflections reflections = new Reflections("com.yejin");
+        scanRepositories(reflections);
         scanServices(reflections);
         scanControllers(reflections);
-        scanRepositories(reflections);
         resolveDependenciesAllComponents();
     }
 

@@ -1,6 +1,8 @@
 
 
 import com.yejin.Container;
+import com.yejin.ControllerManager;
+import com.yejin.RouteInfo;
 import com.yejin.article.controller.ArticleController;
 import com.yejin.article.repository.ArticleRepository;
 import com.yejin.article.service.ArticleService;
@@ -10,6 +12,7 @@ import com.yejin.util.Ut;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -73,7 +76,7 @@ public class AppTest {
     public void ioc_createController__should_create_service_too(){
         ArticleController articleController = Container.getObj(ArticleController.class);
         HomeController homeController = Container.getObj(HomeController.class);
-
+        // ArticleService articleService = articleController.getArticleServiceForTest();
         ArticleService articleService = Ut.reflection.getFieldValue(articleController, "articleService", null);
         HomeService homeService = Ut.reflection.getFieldValue(homeController,"homeService",null);
         System.out.println(articleService);
@@ -87,5 +90,26 @@ public class AppTest {
         ArticleRepository articleRepository = Ut.reflection.getFieldValue(articleService, "articleRepository", null);
         System.out.println(articleRepository);
         assertThat(articleRepository).isNotNull();
+    }
+
+
+    @Test
+    public void ControllerManager__scanMappings() {
+        ControllerManager.init(); // 클래스를 강제로 로딩되게 하려는 목적
+        // init() 비어있는데?? 흠?
+    }
+
+    @Test
+    public void ControllerManager__라우트정보_개수() {
+        Map<String, RouteInfo> routeInfos = ControllerManager.getRouteInfosForTest();
+
+        assertThat(routeInfos.size()).isEqualTo(4);
+    }
+
+    @Test
+    public void Ut__beforeFrom(){
+        String path = "/usr/article/list/free";
+        String actionPath= Ut.str.beforeFrom(path,"/",4);
+        assertThat(actionPath).isEqualTo("/usr/article/list");
     }
 }
