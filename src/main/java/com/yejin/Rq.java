@@ -1,23 +1,20 @@
 package com.yejin;
 
-import com.yejin.article.dto.ArticleDto;
+//import com.yejin.article.dto.ArticleDto;
 import com.yejin.util.Ut;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
-import java.util.Map;
 
 public class Rq {
 
     private final HttpServletRequest req;
     private final HttpServletResponse resp;
+    private RouteInfo routeInfo;
 
     public Rq(HttpServletRequest req, HttpServletResponse resp) {
         this.req = req;
@@ -81,13 +78,35 @@ public class Rq {
     public String getParam(String param,String defaultValue) {
         String value = req.getParameter(param);
 
-        if (value == null)
+        if(routeInfo == null)
             return defaultValue;
+
+        if (value == null){
+            value=getPathParam(param,defaultValue);
+            //return defaultValue;
+        }
         try {
             return value;
         } catch (NumberFormatException e) {
             return defaultValue;
         }
+    }
+
+    private String getPathParam(String param,String defaultValue) {
+        String path = routeInfo.getPath();
+        int idx=-1;
+        String[] pathBits = path.split("/");
+        for(int i=0;i<pathBits.length;i++){
+            String pathBit = pathBits[i];
+            if(pathBit.equals("{"+param+"}")){
+                idx= i-4;
+            }
+        }
+
+        if(idx!=-1)
+            return getPathValueByIndex(idx, defaultValue);
+        return defaultValue;
+
     }
 
     public long getLongParam(String param, long defaultValue){
@@ -239,4 +258,9 @@ public class Rq {
 
         return req.getMethod();
     }
+
+
+
+
+
 }

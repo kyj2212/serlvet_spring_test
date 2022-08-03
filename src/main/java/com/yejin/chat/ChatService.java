@@ -1,6 +1,5 @@
 package com.yejin.chat;
 
-import com.yejin.article.dto.ArticleDto;
 import com.yejin.chat.dto.ChatMessageDto;
 import com.yejin.chat.dto.ChatRoomDto;
 

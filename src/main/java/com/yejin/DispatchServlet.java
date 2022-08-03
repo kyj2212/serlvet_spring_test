@@ -1,8 +1,6 @@
 package com.yejin;
 
-import com.yejin.article.ArticleController;
-import com.yejin.chat.ChatController;
-import com.yejin.member.MemberController;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

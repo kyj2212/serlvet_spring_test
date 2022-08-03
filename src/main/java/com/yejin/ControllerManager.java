@@ -56,10 +56,11 @@ public class ControllerManager {
         String actionPath = rq.getActionPath();
 
         String mappingKey = routeMethod + "___" + actionPath;
-        System.out.println("mappingkey "+mappingKey);
-        System.out.println(routeInfos);
+       // System.out.println("mappingkey "+mappingKey);
+        System.out.println("routeInfos "+routeInfos);
         boolean contains = routeInfos.containsKey(mappingKey);
-        System.out.println("cotains : "+contains);
+      //  System.out.println("cotains : "+contains);
+        System.out.println("cotains : "+routeInfos.get(mappingKey));
 
         if (contains == false) {
             rq.println("해당 요청은 존재하지 않습니다.");

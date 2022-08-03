@@ -8,7 +8,19 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 
+
+
 @Data
+public class ArticleDto {
+    private long id;
+    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
+    private String title;
+    private String body;
+    private boolean isBlind;
+}
+
+/*@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ArticleDto {
@@ -20,4 +32,4 @@ public class ArticleDto {
     private LocalDate createDate;
     private LocalDate modifyDate;
 
-}
+}*/
