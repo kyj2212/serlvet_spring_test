@@ -119,7 +119,7 @@ public class ArticleRepository {
                 .append("SELECT *")
                 .append("FROM article")
                 .append("WHERE id<?",id)
-                // .append("WHERE id=1")
+                .append("AND isBlind = FALSE" )
                 .append("ORDER BY id DESC")
                 .append("LIMIT 1");
         System.out.println("repo articleDtos : "+ sql.selectRows(ArticleDto.class));
@@ -136,6 +136,7 @@ public class ArticleRepository {
                 .append("SELECT *")
                 .append("FROM article")
                 .append("WHERE id>?",id)
+                .append("AND isBlind = FALSE")
                 // .append("WHERE id=1")
                 .append("ORDER BY id ASC")
                 .append("LIMIT 1");

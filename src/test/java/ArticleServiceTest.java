@@ -23,7 +23,7 @@ public class ArticleServiceTest {
 
     private MyMap myMap;
     private ArticleService articleService;
-    private static final int TEST_DATA_SIZE=6;
+    private static final int TEST_DATA_SIZE=30;
 
     @BeforeAll
     public void beforeAll() {
@@ -47,7 +47,7 @@ public class ArticleServiceTest {
     private void makeArticleTestData() {
        // MyMap myMap = Container.getObj(MyMap.class);
         IntStream.rangeClosed(1, TEST_DATA_SIZE).forEach(no -> {
-            boolean isBlind = no > 3;
+            boolean isBlind = no > TEST_DATA_SIZE/3 && no <= TEST_DATA_SIZE/3*2;
             String title = "제목%d".formatted(no);
             String body = "내용%d".formatted(no);
 
@@ -202,6 +202,28 @@ public class ArticleServiceTest {
         assertThat(articleDto).isNull();
         // assertThat(articleDto.isBlind()).isFalse(); // isBlind 는 체크하지 말자
     }
+    @Test
+    public void getNextArticle10st__is21st(){
 
+        ArticleDto articleDto = articleService.getNextArticle(10);
 
+        assertThat(articleDto.getId()).isEqualTo(21L);
+        assertThat(articleDto.getTitle()).isEqualTo("제목21");
+        assertThat(articleDto.getBody()).isEqualTo("내용21");
+        assertThat(articleDto.getCreatedDate()).isNotNull();
+        assertThat(articleDto.getModifiedDate()).isNotNull();
+        // assertThat(articleDto.isBlind()).isFalse(); // isBlind 는 체크하지 말자
+    }
+    @Test
+    public void getPrevArticle21st__is10st(){
+
+        ArticleDto articleDto = articleService.getPrevArticle(21);
+
+        assertThat(articleDto.getId()).isEqualTo(10L);
+        assertThat(articleDto.getTitle()).isEqualTo("제목10");
+        assertThat(articleDto.getBody()).isEqualTo("내용10");
+        assertThat(articleDto.getCreatedDate()).isNotNull();
+        assertThat(articleDto.getModifiedDate()).isNotNull();
+        // assertThat(articleDto.isBlind()).isFalse(); // isBlind 는 체크하지 말자
+    }
 }
