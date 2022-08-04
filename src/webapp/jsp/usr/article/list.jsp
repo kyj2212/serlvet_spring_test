@@ -16,6 +16,9 @@
 			<!-- /title -->
 
 
+			<div class ="container max-w-4xl mx-auto md:flex items-end py-8 px-12 md:px-0">
+             <button class="block mb-4 px-3 py-2 text-xs font-bold rounded-full no-underline hover:shadow bg-blue-600 text-white"
+             onclick="location.href='/usr/article/write/free'">자유게시판 글쓰기</button></div>
 			<div class="container max-w-4xl mx-auto md:flex items-start py-8 px-12 md:px-0">
 				<!-- articles -->
 				<div class="w-full md:pr-12 mb-12">
@@ -44,8 +47,7 @@
 
                      <!--/ articles -->
 
-                     <button class="block mb-4 px-3 py-2 text-xs font-bold rounded-full no-underline hover:shadow bg-blue-600 text-white"
-                     onclick="location.href='/usr/article/write/free'">자유게시판 글쓰기</button>
+
 
                     <!-- ajax 로 최신글 가져오기 -->
                     <!--div class="px-0 py-3 mb-6 border-t border-b">

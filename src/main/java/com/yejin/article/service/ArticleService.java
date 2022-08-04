@@ -30,7 +30,10 @@ public class ArticleService {
         return articleRepository.write(title,body,isBlind);
     }
 
-    public long modify(int id, String title, String body, boolean isBlind) {
+    public long modify(long id,String title, String body ){
+        return modify(id,title, body,false);
+    }
+    public long modify(long id, String title, String body, boolean isBlind) {
         return articleRepository.modify(id,title,body,isBlind);
     }
 

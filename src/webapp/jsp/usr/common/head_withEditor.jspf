@@ -104,7 +104,7 @@ html > body .toastui-editor-contents {
 }
 
 .toastui-editor-dark {
-  background-color: #333;
+  background-color: #F2F3F4;
 }
 /* 토스트 UI 에디터 관련 스타일 끝 */
 

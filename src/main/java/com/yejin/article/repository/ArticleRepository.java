@@ -84,7 +84,7 @@ public class ArticleRepository {
         //return sql.selectRows(ArticleDto.class);
     }
 
-    public long modify(int id, String title, String body, boolean isBlind) {
+    public long modify(long id, String title, String body, boolean isBlind) {
         SecSql sql = myMap.genSecSql();
 
         sql

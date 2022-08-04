@@ -31,16 +31,14 @@
 			<!--p class="text-sm md:text-base leading-normal max-w-xl text-center mx-auto text-gray-800 mb-8">${article.id}</p-->
 			<div class="text-sm md:text-base leading-normal max-w-xl text-center mx-auto text-gray-800">
                     <div class="toast-ui-viewer">
-                        <script type="text/x-template">
-                            ${article.body}
-                        </script>
+                        <script type="text/x-template"> ${article.body} </script>
                     </div>
             </div>
 			<!--p class="text-sm md:text-base leading-normal max-w-xl text-center mx-auto text-gray-800">${article.body}</p-->
 			<p class="mt-10 text-sm md:text-base leading-normal max-w-xl text-right mx-auto text-gray-800">${article.createdDate} | ${article.modifiedDate}</p>
-
+				<div class="px-8 md:px-16 text-right mb-10">
 			<a href="#" onclick="location.href='/usr/article/list/free'" class="block md:inline-block text-center no-underline text-orange-900 px-5 py-3 border-2 border-orange-900 hover:bg-orange-900 hover:text-orange-100">자유게시판 목록</a>
-
+				</div>
 		</div>
 
 
