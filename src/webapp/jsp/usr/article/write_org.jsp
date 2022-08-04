@@ -16,12 +16,12 @@ function ArticleSave__submitForm(form){
             form.body.focus();
             return;
         }
-/*    form.writer.value = form.writer.value.trim();
+    form.writer.value = form.writer.value.trim();
     if(form.writer.value.length==0) {
             alert('내용을 입력해주세요');
             form.writer.focus();
             return;
-        }*/
+        }
     form.submit();
 }
 </script>
@@ -42,12 +42,12 @@ function ArticleSave__submitForm(form){
                 <input name="body" type="text" maxlength="300" placeholder="내용을 입력해주세요." />
             </div>
         </div>
-        <!--div>
+        <div>
             <span>작성자</span>
             <div>
                 <input name="writer" type="text" maxlength="300" placeholder="작성자를 입력해주세요." />
             </div>
-        </div-->
+        </div>
         <div>
             <span>작성</span>
             <div>
@@ -92,14 +92,14 @@ function ArticleSave__submitForm(form){
                                 ...
                             </p>
                         </div>
-                        <!--div>
+                        <div>
                             <label for="writer" class="block text-sm font-medium text-gray-700">
                                 작성자
                             </label>
                             <div class="mt-1">
                                 <textarea id="writer" name="writer" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md" placeholder="작성자을 입력하세요."></textarea>
                             </div>
-                        </div-->
+                        </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">
                                 Photo

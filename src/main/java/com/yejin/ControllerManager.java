@@ -3,6 +3,7 @@ package com.yejin;
 
 import com.yejin.annotation.Controller;
 import com.yejin.annotation.GetMapping;
+import com.yejin.annotation.PostMapping;
 import com.yejin.mymap.MyMap;
 import com.yejin.util.Ut;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +31,7 @@ public class ControllerManager {
 
             for (Method method : methods) {
                 GetMapping getMapping = method.getAnnotation(GetMapping.class);
+                PostMapping postMapping = method.getAnnotation(PostMapping.class);
 
                 String httpMethod = null;
                 String path = null;
@@ -37,6 +39,9 @@ public class ControllerManager {
                 if (getMapping != null) {
                     path = getMapping.value();
                     httpMethod = "GET";
+                }else if (postMapping != null) {
+                    path = postMapping.value();
+                    httpMethod = "POST";
                 }
 
                 if (path != null && httpMethod != null) {

@@ -29,9 +29,9 @@
 							</a>
 						</h2>
 						<div class="mb-4 text-sm text-gray-700">
-							by <a href="#" class="text-gray-700"> ${article.writer} </a>
+							by <a href="#" class="text-gray-700"> ${article.writer}
 							<span class="font-bold mx-1"> | </span>
-							<a href="#" class="text-gray-700">on ${article.createDate} </a>
+							<a href="#" class="text-gray-700">on ${article.createdDate} </a>
 							<!--span class="font-bold mx-1"> | </span-->
 							<!--a href="#" class="text-gray-700">0 Comments</a-->
 						</div>
