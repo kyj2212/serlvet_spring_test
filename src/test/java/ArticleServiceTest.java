@@ -159,7 +159,7 @@ public class ArticleServiceTest {
     @Test
     public void getPrevArticle2st__is1st(){
 
-        ArticleDto articleDto = articleService.getBeforeArticleById(2);
+        ArticleDto articleDto = articleService.getPrevArticle(2);
 
         assertThat(articleDto.getId()).isEqualTo(1L);
         assertThat(articleDto.getTitle()).isEqualTo("제목1");
@@ -170,12 +170,12 @@ public class ArticleServiceTest {
     }
 
     @Test
-    public void getNextArticle(){
+    public void getNextArticle2st__del_id3__is_id4(){
 
         // id=3 이 없으면 4가 나와야지
         articleService.delete(3);
 
-        ArticleDto articleDto = articleService.getNextArticleById(2);
+        ArticleDto articleDto = articleService.getNextArticle(2);
 
 
         assertThat(articleDto.getId()).isEqualTo(4L);
@@ -189,12 +189,19 @@ public class ArticleServiceTest {
     @Test
     public void getPrevArticle1st__none(){
 
-        ArticleDto articleDto = articleService.getBeforeArticleById(1);
+        ArticleDto articleDto = articleService.getPrevArticle(1);
 
         assertThat(articleDto).isNull();
         // assertThat(articleDto.isBlind()).isFalse(); // isBlind 는 체크하지 말자
     }
+    @Test
+    public void getNextArticleLast__none(){
 
+        ArticleDto articleDto = articleService.getNextArticle(TEST_DATA_SIZE);
+
+        assertThat(articleDto).isNull();
+        // assertThat(articleDto.isBlind()).isFalse(); // isBlind 는 체크하지 말자
+    }
 
 
 }

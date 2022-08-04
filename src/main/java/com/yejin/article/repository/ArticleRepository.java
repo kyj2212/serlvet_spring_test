@@ -112,9 +112,8 @@ public class ArticleRepository {
         return sql.delete();
     }
 
-    public ArticleDto getBeforeArticleByid(long id) {
-        //if(id-1<0)
-          // id가 index 아웃바운드일때 는 ?
+    public ArticleDto getPrevArticle(long id) {
+        // id가 index 아웃바운드일때 는 ?
         SecSql sql = myMap.genSecSql();
         sql
                 .append("SELECT *")
@@ -126,7 +125,10 @@ public class ArticleRepository {
         System.out.println("repo articleDtos : "+ sql.selectRows(ArticleDto.class));
         return sql.selectRow(ArticleDto.class);
     }
-    public ArticleDto getNextArticleByid(long id) {
+
+
+
+    public ArticleDto getNextArticle(long id) {
         //if(id+1<0)
         // id가 index 아웃바운드일때 는 ?
         SecSql sql = myMap.genSecSql();
