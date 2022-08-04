@@ -22,8 +22,6 @@
 <!--daisyUI 불러오기 -->
 <!--link href="https://cdn.jsdelivr.net/npm/daisyui@2.20.0/dist/full.css" rel="stylesheet" type="text/css" /-->
 
-<%@ include file="editor_head.jspf"%>
-
 <!-- 공통 CSS -->
 <style>
 @font-face {
