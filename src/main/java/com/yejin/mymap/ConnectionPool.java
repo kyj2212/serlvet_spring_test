@@ -29,10 +29,12 @@ public class ConnectionPool {
     }
 
     public Connection getConnection() {
+
         long currentThreadId = Thread.currentThread().getId();
 
         if (connections.containsKey(currentThreadId) == false) {
             createConnection(currentThreadId);
+            System.out.println("열림");
         }
 
         return connections.get(currentThreadId);

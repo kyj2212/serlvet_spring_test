@@ -4,6 +4,7 @@ import com.yejin.annotation.Autowired;
 import com.yejin.annotation.Controller;
 import com.yejin.annotation.Repository;
 import com.yejin.annotation.Service;
+import com.yejin.mymap.MyMap;
 import com.yejin.util.Ut;
 import org.reflections.Reflections;
 
@@ -50,8 +51,22 @@ public class Container {
         scanRepositories(reflections);
         scanServices(reflections);
         scanControllers(reflections);
+        scanCustom();
+
         resolveDependenciesAllComponents();
     }
+
+    private static void scanCustom() {
+        //System.out.println("MYMAP 객체 생성 in container  ");
+
+        classObjectMap.put(MyMap.class,new MyMap(App.DB_HOST,App.DB_PORT,App.DB_ID, App.DB_PW,App.DB_NAME));
+        System.out.println("MYMAP 객체 생성 in container : "+classObjectMap.get(MyMap.class));
+        //System.out.println(classObjectMap.get(MyMap.class));
+    }
+
+/*    private static void scanCustom() {
+        objects.put(MyMap.class, new MyMap(App.DB_HOST, App.DB_PORT, App.DB_ID, App.DB_PASSWORD, App.DB_NAME));
+    }*/
 
     private static void scanRepositories(Reflections reflections) {
         for(Class<?> cls : reflections.getTypesAnnotatedWith(Repository.class)){

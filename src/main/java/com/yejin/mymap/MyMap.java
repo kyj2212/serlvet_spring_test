@@ -18,6 +18,7 @@ public class MyMap {
     }
 
     public SecSql genSecSql() {
+        System.out.println("genSecSql : ");
         return new SecSql(connectionPool, isDevMode);
     }
 
@@ -27,5 +28,6 @@ public class MyMap {
 
     public void closeConnection() {
         connectionPool.closeConnection();
+        System.out.println("닫힘");
     }
 }

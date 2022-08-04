@@ -5,7 +5,10 @@ import com.yejin.Rq;
 import com.yejin.annotation.Autowired;
 import com.yejin.annotation.Controller;
 import com.yejin.annotation.GetMapping;
+import com.yejin.article.dto.ArticleDto;
 import com.yejin.article.service.ArticleService;
+
+import java.util.List;
 
 @Controller // 컨트롤러 다
 public class ArticleController {
@@ -17,7 +20,11 @@ public class ArticleController {
     // 아래 showList 는 Get /usr/article/list 으로 요청이 왔을 때 실행 되어야 하는 함수이다.
     public void showList(Rq rq) {
         System.out.println("controller.showList() : ");
-        rq.println("게시물 리스트");
+       // rq.println("게시물 리스트");
+        List<ArticleDto> articleDtos = articleService.getArticles();
+        System.out.println("controller articleDtos : "+articleDtos);
+        rq.setAttr("articles", articleDtos);
+        rq.view("usr/article/list");
     }
 
     @GetMapping("/usr/article/detail/{boardCode}/{id}")
@@ -27,9 +34,9 @@ public class ArticleController {
 
         String boardCode = rq.getParam("boardCode","");
         System.out.println("boardCode " + boardCode);
-        long id = rq.getLongPathValueByIndex(1, -1);
+       // long id = rq.getLongPathValueByIndex(1, -1);
+        long id = rq.getLongParam("id",-1);
         System.out.println("게시물 id " + id);
-        // long id = rq.getLongParam("id"); // 곧 기능 구현
 
         rq.println("%d번 게시물".formatted(id));
     }

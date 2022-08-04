@@ -6,6 +6,8 @@ import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -14,6 +16,8 @@ public class Rq {
 
     private final HttpServletRequest req;
     private final HttpServletResponse resp;
+    @Setter
+    @Getter
     private RouteInfo routeInfo;
 
     public Rq(HttpServletRequest req, HttpServletResponse resp) {
@@ -78,22 +82,33 @@ public class Rq {
     public String getParam(String param,String defaultValue) {
         String value = req.getParameter(param);
 
+
+        // Rq 클래스의 routeInfo는 컨트롤러 매니저에서 runAction() 이 실행되면 객체가 생성된다(의존성 주입)
+        System.out.println(routeInfo);
+
         if(routeInfo == null)
             return defaultValue;
+        // value=getPathParam(param,defaultValue);
+
 
         if (value == null){
             value=getPathParam(param,defaultValue);
+            //value=getPathParam(param,defaultValue);
             //return defaultValue;
         }
-        try {
+        if (value == null || value.trim().length() == 0) {
+            return defaultValue;
+        }
+        return value;
+/*        try {
             return value;
         } catch (NumberFormatException e) {
             return defaultValue;
-        }
+        }*/
     }
 
     private String getPathParam(String param,String defaultValue) {
-        String path = routeInfo.getPath();
+        String path = routeInfo.getPath(); // path를 받아서 넣는데,
         int idx=-1;
         String[] pathBits = path.split("/");
         for(int i=0;i<pathBits.length;i++){
@@ -111,7 +126,8 @@ public class Rq {
 
     public long getLongParam(String param, long defaultValue){
 
-        String value = req.getParameter(param);
+       // String value = req.getParameter(param);
+        String value = getParam(param,null);
        // System.out.println(param+" : "+value);
         if(value==null)
             return defaultValue;
@@ -121,6 +137,8 @@ public class Rq {
         } catch (NumberFormatException e){
             return defaultValue;
         }
+
+
     }
 
 
@@ -258,9 +276,6 @@ public class Rq {
 
         return req.getMethod();
     }
-
-
-
 
 
 }

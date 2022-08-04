@@ -3,6 +3,7 @@ package com.yejin;
 
 import com.yejin.annotation.Controller;
 import com.yejin.annotation.GetMapping;
+import com.yejin.mymap.MyMap;
 import com.yejin.util.Ut;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -67,7 +68,12 @@ public class ControllerManager {
             return;
         }
 
-        runAction(rq, routeInfos.get(mappingKey));
+        // 컨트롤러 매니저에서 routeInfo 도 의존성 주입의 형태로 생성한다!!
+        // 여기는 필드에 직접 getter, setter를 추가해서 그냥 setRoutInfo를 해버림
+        RouteInfo routeInfo = routeInfos.get(mappingKey);
+        rq.setRouteInfo(routeInfo);
+
+        runAction(rq, routeInfo);
     }
 
     private static void runAction(Rq rq, RouteInfo routeInfo) {
@@ -78,11 +84,20 @@ public class ControllerManager {
         Object controllerObj = Container.getObj(controllerCls);
 
         try {
+            // 여기서 rq 를 넣네
+
             actionMethod.invoke(controllerObj, rq);
         } catch (IllegalAccessException e) {
             rq.println("액션시작에 실패하였습니다.");
         } catch (InvocationTargetException e) {
-            rq.println("액션시작에 실패하였습니다.");
+
+            throw new RuntimeException();
+            // exception cause 볼수 있음
+            //rq.println("액션시작에 실패하였습니다.");
+        }
+        finally {
+            MyMap myMap = Container.getObj(MyMap.class);
+            myMap.closeConnection();
         }
     }
 
