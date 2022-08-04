@@ -111,4 +111,33 @@ public class ArticleRepository {
         //  System.out.println(sql.selectRows(ArticleDto.class));
         return sql.delete();
     }
+
+    public ArticleDto getBeforeArticleByid(long id) {
+        //if(id-1<0)
+          // id가 index 아웃바운드일때 는 ?
+        SecSql sql = myMap.genSecSql();
+        sql
+                .append("SELECT *")
+                .append("FROM article")
+                .append("WHERE id<?",id)
+                // .append("WHERE id=1")
+                .append("ORDER BY id DESC")
+                .append("LIMIT 1");
+        System.out.println("repo articleDtos : "+ sql.selectRows(ArticleDto.class));
+        return sql.selectRow(ArticleDto.class);
+    }
+    public ArticleDto getNextArticleByid(long id) {
+        //if(id+1<0)
+        // id가 index 아웃바운드일때 는 ?
+        SecSql sql = myMap.genSecSql();
+        sql
+                .append("SELECT *")
+                .append("FROM article")
+                .append("WHERE id>?",id)
+                // .append("WHERE id=1")
+                .append("ORDER BY id ASC")
+                .append("LIMIT 1");
+        System.out.println("repo articleDtos : "+ sql.selectRows(ArticleDto.class));
+        return sql.selectRow(ArticleDto.class);
+    }
 }
