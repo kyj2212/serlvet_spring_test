@@ -61,7 +61,7 @@ public class ControllerManager {
         System.out.println("routeInfos "+routeInfos);
         boolean contains = routeInfos.containsKey(mappingKey);
       //  System.out.println("cotains : "+contains);
-        System.out.println("cotains : "+routeInfos.get(mappingKey));
+        System.out.println("cotains : "+routeInfos.get(mappingKey).getPath()+routeInfos.get(mappingKey).getActionPath()+routeInfos.get(mappingKey).getControllerCls()+routeInfos.get(mappingKey).getMethod());
 
         if (contains == false) {
             rq.println("해당 요청은 존재하지 않습니다.");
@@ -85,7 +85,7 @@ public class ControllerManager {
 
         try {
             // 여기서 rq 를 넣네
-
+            System.out.println("reqeust : " );
             actionMethod.invoke(controllerObj, rq);
         } catch (IllegalAccessException e) {
             rq.println("액션시작에 실패하였습니다.");

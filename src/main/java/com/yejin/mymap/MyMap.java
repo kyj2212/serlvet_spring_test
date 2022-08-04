@@ -18,7 +18,7 @@ public class MyMap {
     }
 
     public SecSql genSecSql() {
-        System.out.println("genSecSql : ");
+       // System.out.println("genSecSql : ");
         return new SecSql(connectionPool, isDevMode);
     }
 
